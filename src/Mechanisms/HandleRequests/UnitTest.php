@@ -124,7 +124,7 @@ class UnitTest extends TestCase
         Livewire::component('livewire-ui-modal', MaliciousPayloadComponent::class);
 
         $payload = json_decode(
-            file_get_contents(__DIR__.'/../../../tests/fixtures/malicious-livewire-payload.json'),
+            file_get_contents($this->fixturePath('malicious-livewire-payload.json')),
             true,
             512,
             JSON_THROW_ON_ERROR
@@ -384,6 +384,11 @@ class UnitTest extends TestCase
         $uri = $handleRequests->getUpdateUri();
 
         $this->assertEquals(EndpointResolver::updatePath(), $uri);
+    }
+
+    protected function fixturePath(string $file): string
+    {
+        return dirname(__DIR__, 3).'/tests/fixtures/'.$file;
     }
 }
 
