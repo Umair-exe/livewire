@@ -114,14 +114,14 @@ class UnitTest extends TestCase
         $response->assertStatus(419);
     }
 
-    public function test_reported_malicious_payload_returns_419(): void
+    public function test_malicious_payload_with_serialized_exploits_returns_419(): void
     {
         config()->set('app.debug', false);
 
         Livewire::component('livewire-ui-modal', MaliciousPayloadComponent::class);
 
         $payload = json_decode(
-            file_get_contents(dirname(__DIR__, 3).'/tests/fixtures/malicious-livewire-payload.json'),
+            file_get_contents(__DIR__.'/../../../tests/fixtures/malicious-livewire-payload.json'),
             true,
             512,
             JSON_THROW_ON_ERROR
