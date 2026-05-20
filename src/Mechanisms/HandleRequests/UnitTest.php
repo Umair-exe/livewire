@@ -114,6 +114,9 @@ class UnitTest extends TestCase
         $response->assertStatus(419);
     }
 
+    /**
+     * Guards against PHP object-injection style payloads using a captured exploit sample.
+     */
     public function test_malicious_payload_with_serialized_exploits_returns_419(): void
     {
         config()->set('app.debug', false);
