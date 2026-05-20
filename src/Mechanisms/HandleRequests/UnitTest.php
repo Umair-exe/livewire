@@ -114,6 +114,25 @@ class UnitTest extends TestCase
         $response->assertStatus(419);
     }
 
+    public function test_reported_malicious_payload_returns_419(): void
+    {
+        config()->set('app.debug', false);
+
+        Livewire::component('livewire-ui-modal', MaliciousPayloadComponent::class);
+
+        $payload = json_decode(
+            file_get_contents(dirname(__DIR__, 3).'/tests/fixtures/malicious-livewire-payload.json'),
+            true,
+            512,
+            JSON_THROW_ON_ERROR
+        );
+
+        $response = $this->withHeaders(['X-Livewire' => 'true'])
+            ->postJson(EndpointResolver::updatePath(), $payload);
+
+        $response->assertStatus(419);
+    }
+
     public function test_type_mismatched_update_value_returns_419(): void
     {
         // Disable debug mode to test production HTTP responses (404/419)...
@@ -363,4 +382,8 @@ class UnitTest extends TestCase
 
         $this->assertEquals(EndpointResolver::updatePath(), $uri);
     }
+}
+
+class MaliciousPayloadComponent extends TestComponent
+{
 }
